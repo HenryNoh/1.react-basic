@@ -1,6 +1,7 @@
 import React from 'react';
 import Hello from './Hello';
 import Wrapper from './Wrapper';
+import Counter from './Counter';
 import './App.css';
 
 function App() {
@@ -18,6 +19,9 @@ function App() {
     {/* 주석*/}
       {/* name을 정해줌 */}
       <Hello name="react" color="red" />
+      {/* isSpecial이라는 props 설정 true값은 js라서 {}로 묶어주기*/}
+      {/* isSpecial={true} == isSpecial */}
+      <Hello name="isSpecial" color="blue" isSpecial />
       {/* name을 정해주지 않아서 default로 표시됨 */}
       <Hello color="pink"/>
       {/*
@@ -27,6 +31,7 @@ function App() {
       */}
       <div style={style}>{name}</div>
       <div className="gray-box"></div>
+      <Counter></Counter>
     </Wrapper>
   );
 }

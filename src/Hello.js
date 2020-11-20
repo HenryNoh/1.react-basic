@@ -1,8 +1,12 @@
 import React from 'react';
 
-function Hello({color,name}) {
+function Hello({color,name,isSpecial}) {
     return (
         <div style={{color}}>
+            {/* 3항 연산자 사용 */}
+            {/* {isSpecial ?<b>*</b> : null} */}
+            {/* && || 논리계산법 (https://learnjs.vlpt.us/useful/03-short-circuiting.html) */}
+            {isSpecial && <b>*</b>}
             Hello Friends {name}
         </div>
     );
