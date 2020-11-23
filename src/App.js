@@ -1,8 +1,9 @@
-import React from 'react';
+import React , {useRef} from 'react';
 import Hello from './Hello';
 import Wrapper from './Wrapper';
 import Counter from './Counter';
 import InputSample from './InputSample';
+import UserList from './UserList';
 import './App.css';
 
 function App() {
@@ -12,7 +13,31 @@ function App() {
     color: 'aqua',
     fontsize: 24,
     padding: '1rem'
-  }
+  };
+  const users = [
+    {
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com'
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com'
+    }
+  ];
+  const nextId = useRef(4);
+  // ref로 특정 값을 선언하면 .current가 그값이 된다.
+  const onCreate = () => {
+    nextId.current+=1;
+  };
+
+
   return (
     // 다른 컴포넌트를 묶는 컴포넌트 style을 해당 컴포넌트 내부에서 설정시
     // 상위 컴포넌트의 props에 children을 넣어주고 내부 컴포넌트 안에 children을 넣어준다.
@@ -36,6 +61,7 @@ function App() {
       <Counter/>
       {/* Input 사용하는 방법 */}
       <InputSample/>
+      <UserList users={users}/>
     </Wrapper>
   );
 }

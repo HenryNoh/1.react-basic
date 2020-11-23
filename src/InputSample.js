@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useRef } from 'react';
 
 function InputSample(){
     // const [text,setText] = useState('');
@@ -17,6 +17,9 @@ function InputSample(){
         name: '',
         nickname: ''
     });
+
+    // 특정 DOM을 선택할 때 사용하는 ref
+    const nameInput = useRef();
 
     // 비구조화 할당을 해주지 않으면 밑의 JSX에서 JS의 변수를 사용할 수 없다.
     const {name, nickname} = inputs;
@@ -42,12 +45,13 @@ function InputSample(){
             name: '',
             nickname: '',
         })
+        nameInput.current.focus();
     };
 
     return(
         <div>
             {/* <input onChange = {onChange} value = {text}/> */}
-            <input name="name" placeholder="이름" onChange={onChange} value={name}/>
+            <input name="name" placeholder="이름" onChange={onChange} value={name} ref={nameInput}/>
             <input name="nickname" placeholder="닉네임" onChange={onChange} value={nickname}/>
             <button onClick = {onReset}>초기화</button>
             <div>
