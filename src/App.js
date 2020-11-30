@@ -1,6 +1,8 @@
 import React, { useState, useRef, useMemo, useCallback, useReducer } from 'react';
 import CreateUser from './CreateUser';
+import useInputs from './hooks/useInputs';
 import UserList from './UserList';
+import useInputs from './hooks/useInputs';
 
 function countActiveUsers(users){
   console.log('활성 사용자를 세는 중');
@@ -8,10 +10,6 @@ function countActiveUsers(users){
 }
 
 const initialState = {
-  inputs: {
-    username: '',
-    email: '',
-  },
   users: [
     {
       id: 1,
@@ -36,17 +34,6 @@ const initialState = {
 
 function reducer(state,action){
   switch (action.type){
-    case 'CHANGE_INPUT':
-      return{
-        // 기존의 state를 받아오고
-        // inputs 값에 state의 inputs를 넣어주고
-        // 해당 dispatch에서 가져온 name과 value를 선택해서 바꿔준다.
-        ...state,
-        inputs:{
-          ...state.inputs,
-          [action.name]: action.value
-        }
-      };
     case 'CREATE_USER':
       // inputs에 기존의 initialState의 inputs를 넣어줘서 생성하고 (빈거?)
       // users는 App에서 비구조화 할당으로 state가 구현되서 그곳의 users의 기존 값을 복사해온다 처음에는
@@ -80,29 +67,19 @@ function reducer(state,action){
 }
 
 function App() {
+  // 직접만든 hooks useInputs를 통해서 useState와 같은 onChange 함수에 있었던 걸 줄여준다.
+  const [{ username, email }, onChange, reset] = useInputs({
+    username: '',
+    email: '',
+  });
+
   // useReducer를 사용해서 첫번째 인자 reducer 함수, 두번째 인자 initialState를 받아오고
-  // 비구조화 할당으로 state에 넣어준다.
   // 비구조화 할당으로 users에 state값을 할당
-  // 비구조화 할당으로 username,email에 state의 input에 들어가 있는 값을 할당
   // onCreate에서 써줄 nextId를 useRef로 할당
   const [state,dispatch] = useReducer(reducer,initialState);
   const { users } = state;
-  const { username, email } = state.inputs;
   const nextId = useRef(4);
 
-  // onChange 함수는 useCallback으로 구현해준다.
-  // onChange 함수가 들어갈 곳에서 name과 value를 받아오고
-  // dispatch를 통해서 reducer의 action.name에 함수가 들어갈 곳에서 받아온 name을 넣어주고
-  // action.value에 함수가 들어갈 곳에서 받아온 value를 넣어준다.
-  const onChange = useCallback(e => {
-    const { name,value } = e.target;
-    dispatch({
-      type: 'CHANGE_INPUT',
-      name,
-      value,
-    });
-  }, []);
-  
   // onCreate 함수는 useCallback으로 구현해준다.
   // dispatch를 통해서 reducer의 users를 바꿔줄 action.user에 username과 email을 넣어준다. 
   const onCreate = useCallback(() => {
@@ -114,6 +91,7 @@ function App() {
         email,
       }
     });
+    reset();
     nextId.current += 1;
   }, [username,email]);
 
